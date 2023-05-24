@@ -22,7 +22,7 @@ devcontainerを設定した時の初期状態
 8. remoteUserにユーザーを指定する
 9.  コマンドパレットから Rebuild Containerする
 
-## Poetryのパッケージ管理手順
+## Poetryのパッケージ管理手順 (devcontainer_poetry)
 
 1. poetryの初期設定を行って、pyproject.tomlを生成する
 ```
@@ -49,13 +49,27 @@ devcontainer.jsonにpoetry installを追加する
 "postCreateCommand": "poetry install",
 ```
 
-## Docker-Composeでデータベースを一緒に起動する
+## Docker-Composeでデータベースを一緒に起動する (devcontainer_docker-compose)
 
-1. docker-compose.ymlを追加します
+1. docker-compose.ymlを追加する
+   1.  .devcontainer_docker-compose/docker-compose.yml 参照
+   2.  devcontainer.jsonのrunArgsが使えないので、docker-composeで.envを取り込むようにする
+```
+      env_file:
+      - .env
+```
+2. initdb.dディレクトリを追加して、SQLファイルを格納する
+     * docker-entrypoint-initdb.d 内のファイルがコンテナ作成時に実行されるらしい
+3. devcontainer.jsonの記述を追加します
+```
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "main",
+```
+
+1. ビルドしなおして、DBにアクセスできるか確認します。
 
 
 ## 参考情報
 
 * devcontainer.jsonのリファレンス
   * https://containers.dev/implementors/json_reference/
-* 
