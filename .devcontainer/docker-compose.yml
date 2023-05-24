@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  main:
+    env_file:
+      - .env
+    build: 
+      context: ../
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/application
+    tty: true
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 3306:3306
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
